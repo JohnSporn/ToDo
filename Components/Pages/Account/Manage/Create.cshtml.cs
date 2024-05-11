@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Todo.Models;
@@ -6,11 +7,13 @@ using ToDoApp.Data.Repositories;
 
 namespace ToDoApp.Components.Pages.Account.Manage
 {
+    [AllowAnonymous]
     public class CreateModel : PageModel
     {
         private readonly IUserRepository userRepository;
 
         public CreateModel(IUserRepository userRepository)
+        
         {
             this.userRepository = userRepository;
         }

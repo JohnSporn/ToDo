@@ -16,7 +16,7 @@ namespace ToDoApp.Data.Repositories
         }
         async Task<User> IAuthenticateUser.AuthenticateUser(string username, string password)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Transactions;
@@ -9,6 +11,7 @@ using ToDoApp.Data.Repositories;
 
 namespace ToDoApp.Components.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly ILogger<LoginModel> logger;
@@ -23,7 +26,8 @@ namespace ToDoApp.Components.Pages.Account
             return Page();
         }
 
-        public InputModel Input { get; set; } = default!;
+        [BindProperty]
+        public InputModel Input { get; set; } = new();
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -64,9 +68,11 @@ namespace ToDoApp.Components.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Username is required")]
+            [DataType(DataType.Text)]
             public string Username { get; set; }
-            [Required]
+            [Required(ErrorMessage = "Password is required")]
+            [DataType(DataType.Password)]
             public string Password { get; set; }
         }
     }

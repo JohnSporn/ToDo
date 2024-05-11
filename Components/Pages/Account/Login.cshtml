@@ -1,4 +1,19 @@
 ﻿@page "/Login"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model ToDoApp.Components.Pages.Account.LoginModel
 @{
+
 }
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <label for="username">Username:</label>
+    <input type="text" asp-for="@Model.Input.Username" />
+    <span asp-validation-for="@Model.Input.Username" class="text-danger"></span>
+    <label for="password">Password:</label>
+    <input type="text" asp-for="@Model.Input.Password" />
+    <span asp-validation-for="@Model.Input.Password" class="text-danger"></span>
+    <button type="submit">Login</button>
+</form>
