@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Todo.Data;
 using Todo.Models;
 
@@ -16,7 +17,20 @@ namespace ToDoApp.Data.Repositories
         }
         async Task<User> IAuthenticateUser.AuthenticateUser(string username, string password)
         {
-            return null;
+            var users = await todoContext.User.ToListAsync();
+            var user = from u in users
+                       where u.Username == username
+                       select u;
+            IPasswordHasher<User> passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(user.First(), user.First().Password, password);
+            if(result != 0)
+            {
+                return user.First();
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

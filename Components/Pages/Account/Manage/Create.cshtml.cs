@@ -32,8 +32,6 @@ namespace ToDoApp.Components.Pages.Account.Manage
             {
                 return Page();
             }
-            PasswordHasher<User> passwordHasher = new();
-            User.Password = passwordHasher.HashPassword(User, User.Password);
             var user = new User();
             if(await TryUpdateModelAsync<User>(
                 user,
