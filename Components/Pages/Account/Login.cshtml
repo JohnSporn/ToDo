@@ -5,11 +5,9 @@
 
 }
 
-<script src="https://cdn.tailwindcss.com"></script>
-
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <label for="username">Username:</label>
+    <label class="font-bold" for="username">Username:</label>
     <input type="text" asp-for="@Model.Input.Username" />
     <span asp-validation-for="@Model.Input.Username" class="text-danger"></span>
     <label for="password">Password:</label>

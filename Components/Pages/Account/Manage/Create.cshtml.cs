@@ -7,7 +7,7 @@ using ToDoApp.Data.Repositories;
 
 namespace ToDoApp.Components.Pages.Account.Manage
 {
-    [AllowAnonymous]
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly IUserRepository userRepository;
