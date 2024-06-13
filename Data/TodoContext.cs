@@ -11,5 +11,6 @@ namespace Todo.Data
         }
 
         public DbSet<User> User { get; set; } = default!;
+        public DbSet<ToDo> Todo { get; set; } = default!;
     }
 }

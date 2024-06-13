@@ -5,11 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Todo.Data;
 using ToDoApp.Components;
 using ToDoApp.Data.Repositories;
+using MudBlazor.Services;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TodoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TodoContext") 
     ?? throw new InvalidOperationException("Connection string 'TodoContext' not found.")));
+
+builder.Services.AddMudServices();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -29,6 +34,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddScoped<IAuthenticateUser, AuthenticateUser>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITodoRepository, TodoRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();

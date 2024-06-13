@@ -2,16 +2,55 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model ToDoApp.Components.Pages.Account.LoginModel
 @{
-
+    ViewData["title"] = "Login";
 }
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <label class="font-bold" for="username">Username:</label>
-    <input type="text" asp-for="@Model.Input.Username" />
-    <span asp-validation-for="@Model.Input.Username" class="text-danger"></span>
-    <label for="password">Password:</label>
-    <input type="text" asp-for="@Model.Input.Password" />
-    <span asp-validation-for="@Model.Input.Password" class="text-danger"></span>
-    <button type="submit">Login</button>
-</form>
+<style>
+    section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    form {
+        display: flex;
+        flex-flow: column wrap;
+        padding: 20px 10px;
+        width: 250px;
+        border: solid;
+    }
+
+    form > input {
+        margin-bottom: 10px;
+    }
+
+    button:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    a {
+        padding-top: 10px;
+        text-align: center;
+    }
+</style>
+
+<section>
+    <form method="post">
+        <h2>Todo</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label class="font-bold" for="username">Username:</label>
+        <input type="text" asp-for="@Model.Input.Username" />
+        <span asp-validation-for="@Model.Input.Username" class="text-danger"></span>
+        <label for="password">Password:</label>
+        <input type="text" asp-for="@Model.Input.Password" />
+        <span asp-validation-for="@Model.Input.Password" class="text-danger"></span>
+        <button type="submit">Login</button>
+        <a asp-page="/Account/Manage/Create">Register</a>
+    </form>
+</section>

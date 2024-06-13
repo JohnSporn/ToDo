@@ -1,4 +1,98 @@
 ﻿@page "/"
-<h1 class="font-bold">Hello, world!</h1>
+@using Todo.Models
+@inject ToDoApp.Data.Repositories.ITodoRepository _repository
+@inject ISnackbar Snackbar
 
-Welcome to your new app.
+<PageTitle>Home</PageTitle>
+
+<MudTable Items="@todos" Hover="true" Striped="true" SortLabel="Sort By" ReadOnly="false" CanCancelEdit="true" FixedHeader="true"
+          @bind-SelectedItem="selectedItem" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
+          RowEditCommit="ItemHasBeenCommitted" ApplyButtonPosition="@applyButtonPosition"
+          EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Todo List</MudText>
+        <MudSpacer />
+        <MudButton OnClick="@AddNewTodo">Add</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ToDo, object>(x => x.Title)">Title</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ToDo, object>(x => x.Description)">Description</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ToDo, object>(x => x.Deadline)">Deadline</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Title">@context.Title</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Deadline">@context.Deadline</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Title">
+            <MudTextField @bind-Value="@context.Title" />
+        </MudTd>
+        <MudTd DataLabel="Description">
+            <MudTextField @bind-Value="@context.Description" />
+        </MudTd>
+        <MudTd DataLabel="Deadline">
+            <MudDatePicker @bind-Value="@context.Deadline" />
+        </MudTd>
+    </RowEditingTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private ToDo todo { get; set; } = new ToDo();
+    private IList<ToDo> todos { get; set; } = new List<ToDo>();
+    private bool success = false;
+    private ToDo selectedItem = null;
+    private HashSet<ToDo> selectedItems = new HashSet<ToDo>();
+    private ToDo todoBeforeEdit;
+    private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.End;
+    private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.End;
+    private TableEditTrigger editTrigger = TableEditTrigger.RowClick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await foreach (var item in _repository.GetToDos())
+        {
+            todos.Add(item);
+        }
+    }
+
+    private async void AddNewTodo()
+    {
+        todos.Add(new ToDo());
+    }
+
+    private async void OnValidSubmit()
+    {
+        var result = await _repository.CreateTodo(todo);
+        if (result > 0)
+        {
+            success = true;
+        }
+    }
+
+    private void BackupItem(object element)
+    {
+        todoBeforeEdit = new()
+            {
+                Title = ((ToDo)element).Title,
+                Description = ((ToDo)element).Description,
+                Deadline = ((ToDo)element).Deadline
+            };
+    }
+
+    private void ItemHasBeenCommitted(object element)
+    {
+
+    }
+
+    private void ResetItemToOriginalValues(object element)
+    {
+        ((ToDo)element).Title = todoBeforeEdit.Title;
+        ((ToDo)element).Description = todoBeforeEdit.Description;
+        ((ToDo)element).Deadline = todoBeforeEdit.Deadline;
+    }
+}
